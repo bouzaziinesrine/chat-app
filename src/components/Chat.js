@@ -9,7 +9,7 @@ const style ={
 }
 
 const Chat = () => {
-    const[messages,setMessages]=useState();
+    const[messages,setMessages]=useState([]);
     const scroll = useRef();
 
 
