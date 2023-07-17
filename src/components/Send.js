@@ -14,31 +14,37 @@ const style  ={
 const Send = ({scroll}) => {
     const [input , setInput]= useState('');
     
-    const sendMessage = async(e) =>{
-        e.preventDefault()
-        if (input ===''){
-            alert('Please enter a message')
-            return
-        }
-        const {uid, displayName}= auth.currentUser
-        await addDoc(collection(db,'messages'),{
-            text:input,
-            name:displayName,
-            uid,
-            timestamp:serverTimestamp()
-        })
-        setInput('')
-        scroll.current.scrollIntoView({behavior: 'smooth'})
-        
+    const Send = async (e) => {
+			e.preventDefault();
+			if (input === "") {
+				alert("Please enter a message");
+				return;
+			}
+			const { uid, displayName } = auth.currentUser;
+			await addDoc(collection(db, "messages"), {
+				text: input,
+				name: displayName,
+				uid,
+				timestamp: serverTimestamp(),
+			});
+			setInput("");
+			scroll.current.scrollIntoView({ behavior: "smooth" });
+		};
 
-}
-
-  return (
-    <form onSubmit={sendMessage} className={style.form}>
-        <input value={input} onChange={(e) => setInput(e.target.value)} className={style.input} type='text' placeholder='Message'/>
-        <button className={style.button} type='submit'>Send</button>
-    </form>
-  )
+		return (
+			<form onSubmit={Send} className={style.form}>
+				<input
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+					className={style.input}
+					type="text"
+					placeholder="Message"
+				/>
+				<button className={style.button} type="submit">
+					Send
+				</button>
+			</form>
+		);
 }
 
 export default Send

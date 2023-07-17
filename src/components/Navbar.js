@@ -7,9 +7,9 @@ import LogOut from './LogOut';
 
 
 const style = {
-  nav:' bg-gray-800 h-20 flex justify-between items-center p-4',
-  heading:'text-white text-3xl',
-}
+	nav: `bg-gray-800 h-20 flex justify-between items-center p-4`,
+	heading: `text-white text-3xl`,
+};
 const Navbar = () => {
   const [user] = useAuthState(auth)
   console.log(user)

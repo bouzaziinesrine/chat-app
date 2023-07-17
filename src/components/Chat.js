@@ -1,44 +1,50 @@
-import React, {useState ,useEffect ,useRef} from 'react'
-import Message from './Message'
-import {  collection, onSnapshot, query, orderBy } from 'firebase/firestore'
-import { db } from '../firebase'
-import Send from './Send'
+import React, { useState, useEffect, useRef } from "react";
+import Message from "./Message";
+import Send from "./Send";
+import { db } from "../firebase";
+import { query, collection, orderBy, onSnapshot } from "firebase/firestore";
 
-const style ={
-    main:'flex flex-col p-[10px]',
-}
+const style = {
+	main: `
+    flex 
+    flex-col 
+    p-[10px]
+    max-h-[765px]
+    overflow-y-auto 
+    scrollbar-thin 
+    scrollbar-thumb-gray-300 
+    scrollbar-track-gray-100
+  `,
+};
 
 const Chat = () => {
-    const[messages,setMessages]=useState();
-    const scroll = useRef();
+	const [messages, setMessages] = useState([]);
+	const scroll = useRef();
 
+	useEffect(() => {
+		const q = query(collection(db, "messages"), orderBy("timestamp"));
+		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+			let messages = [];
+			querySnapshot.forEach((doc) => {
+				messages.push({ ...doc.data(), id: doc.id });
+			});
+			setMessages(messages);
+		});
+		return () => unsubscribe();
+	}, []);
 
-    useEffect (() =>{
-        const q = query(collection(db,'messages'),orderBy('timestamp'))
-        const unsubscribe = onSnapshot(q,(QuerySnapshot) =>{
-            let messages = []
-            QuerySnapshot.forEach((doc) => {
-                messages.push({...doc.data(),id: doc.id})
+	return (
+		<>
+			<main className={style.main} ref={scroll}>
+				{messages &&
+					messages.map((message) => (
+						<Message key={message.id} message={message} />
+					))}
+			</main>
+			{/* Send Message Component */}
+			<Send scroll={scroll} />
+		</>
+	);
+};
 
-            })
-            setMessages(messages)
-        })
-        return () => unsubscribe()
-    },[])
-    
-  return (
-   <div>
-    <main className={style.main}>
-
-            {messages && messages.map((message) => (
-                <Message key={message.id} message={message} />
-            ))}
-
-    </main>
-    <Send scroll={scroll}/>
-    <span ref={scroll}></span>
-   </div>
-  )
-}
-
-export default Chat
+export default Chat;
