@@ -9,7 +9,7 @@ const style = {
     flex 
     flex-col 
     p-[10px]
-    max-h-[765px]
+    max-h-[550px]
     overflow-y-auto 
     scrollbar-thin 
     scrollbar-thumb-gray-300 
